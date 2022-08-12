@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta charset="UTF-8">
+	<title>Tela de Estados</title>
+</h:head>
+<h:body>
+	<h:form id="fomrListagem">
+		<p:panel header="Listagem de Estados">
+			<p:dataTable id="tabela" value="#(estadoBean.estados)" var="estado"
+				paginator="true" rows="20">
+				
+				<f:facet name="header">
+				   <p:commandButton value="Novo!" actionListener="#(estadoBean.novo)"
+				                                  update=":formCadastro:painel"
+				                                  oncomplete="PF('dialog').show();"/>
+				</f:facet>
+
+				<p:column headerText="Nome">
+					<h:outputText value="#(estado.nome)" />
+				</p:column>
+
+				<p:column headerText="Sigla">
+					<h:outputText value="#(estado.sigla)" />
+				</p:column>
+
+				<p:column headerText="Opções">
+					<p:commandButton icon="ui-ícon-trash"
+						actionLstener="#(estadoBean.excluir)" update=":formListagem:table">
+						<p:confirm header="Confirmação" message="Deseja Excluir? "
+							icon="ui-icon-alert" />
+						<f:attribute name="estadoSelecionado" value="#(estado)" />
+					</p:commandButton>
+
+					<p:commandButton icon="ui-ícon-pencil"
+						actionListener="#(estadoBean.editar)"
+						update=":formCdastro:painel" oncomplete="PF('dialog').show();">
+						<f:attribute name="estadoSelecionado" value="#(estado)" />
+					</p:commandButton>
+
+
+				</p:column>
+
+			</p:dataTable>
+			<p:confirmDialog global="true">
+				<p:commandButton value="sim" type="button"
+					styleClass="ui.confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="não" type="button"
+					styleClass="ui.confirmdialog-no" icon="ui-icon-close" />
+		</p:panel>
+	</h:form>
+
+	<p:dialog header="Cadastro de Estados" widgetVar="dialog" modal="true"
+		draggable="false" resizeble="false" closable="false">
+		<h:form id="formCadastro">
+
+			<h:panelGrid id="painel" columns="2">
+
+				<p:outputLabel value="Nome:" />
+				<p:inputText maxlength="40" size="30"
+					value="#(estadoBean.estado.nome)" />
+
+				<p:outputLabel value="Sigla:" />
+				<p:inputText maxlength="2" size="10"
+					value="#(estadoBean.estado.sigla)" />
+
+			</h:panelGrid>
+			<h:panelGrid>
+			
+			<p:commandButton value="Salvar" actionLstener="#(esatdoBean.salvar)"/>
+			<p:commandButton value="Fechar" oncomplete="PF('dialog').hide();"
+			                                update=":formCadastro:painel :formListagem:tabela"/>
+			</h:panelGrid>
+
+		</h:form>
+	</p:dialog>
+
+</h:body>
+</html>
